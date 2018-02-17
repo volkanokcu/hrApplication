@@ -18,7 +18,7 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 				<div class="navbar-nav">
-					<a class="nav-item nav-link active" href="#">JOB LISTNINGS<span
+					<a class="nav-item nav-link" href="/jobs.html">JOB LISTNINGS<span
 						class="sr-only">(current)</span></a> 
 					<a class="nav-item nav-link"
 						href="/auth/add.html">JOB MANAGER PAGE</a>
@@ -26,15 +26,15 @@
 			</div>
 		</nav>
 		
-		<!-- JOB DIV TEMPLETE-->
-		<div class="border border-dark mt-3 pl-1" id="jobDiv" style="display:none">
-			<h2><a href="" id="jobHeader"></a></h2>
-		</div>	
-		
-		<!-- JOB LISTINGS -->
-		<div id="listDiv">
-		
+		<!-- JOB DETAILS-->
+		<div class="mt-3">
+			<h2 id="title"></h2>
+			<p id="numberOfPeopleHire"><strong>Number of Vacancies: </strong></p>
+			<p id="lastApplicationDate"><strong>Job Closing Date: </strong></p>
+			<h3>Job Description</h3>
+			<p id="description"></p>
 		</div>
+		<button type="button" class="btn btn-primary" onClick="if(validation()) save();" >Apply Job</button>
 		
 	</div>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -42,43 +42,40 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script type="text/javascript">
 	
-	var list = null;
-	var jobDiv = document.getElementById("jobDiv");
-	var listDiv = document.getElementById("listDiv");
-
-		$.ajax({
-			type: 'GET',
-			url: '/job/list',
-			contentType: "application/json; charset=utf-8",
-			async: false,
-			dataType: "json",
-			success: function (result) {
-				list = result;
-			},
-			error: function(err) {
-				console.log(err)
-	        }	
-		});
-	
-	function cloneJobDiv(i) {
-		var div = jobDiv.cloneNode(true);
-		div.id += i;
-		div.style = "";
-		return div;
-	}
-	
-	/*FILL JOB LIST*/
-	if ( null != list ) {
-		for ( var i=0; i<list.length; i++) {
-			var job = list[i];
-			var jobDiv = cloneJobDiv(i);
-			jobDiv.querySelector("#jobHeader").innerHTML = job.title;
-			jobDiv.querySelector("#jobHeader").href = "/job.html?id=" + job.id;
-			listDiv.appendChild(jobDiv);
-		}
-	}
-	
+		var title = document.getElementById("title");
+		var numberOfPeopleHire = document.getElementById("numberOfPeopleHire");
+		var lastApplicationDate = document.getElementById("lastApplicationDate");
+		var description = document.getElementById("description");
+		var url = new URL(window.location.href);
+		var id = url.searchParams.get("id");
+		var job = null;
 		
+		if (null != id) {
+			$.ajax({
+				type: 'GET',
+				url: '/job/details/' + id,
+				contentType: "application/json; charset=utf-8",
+				async: false,
+				dataType: "json",
+				success: function (result) {
+					job = result;
+				},
+				error: function(err) {
+					console.log(err)
+		        }	
+			});
+			
+		} else window.location.replace("/jobs.html");
+		
+		if ( null == job ) {
+			window.location.replace("/jobs.html");
+		} else {
+			title.innerHTML = job.title;
+			numberOfPeopleHire.innerHTML += job.numberOfPeopleHire;
+			lastApplicationDate.innerHTML += job.lastApplicationDate
+			description.innerHTML = job.description;
+		}
+	
 	</script>
 </body>
 </html>

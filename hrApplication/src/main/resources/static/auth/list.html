@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>CREATE NEW JOB</title>
+	<title>Manager Panel</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
@@ -20,41 +20,29 @@
 				<div class="navbar-nav">
 					<a class="nav-item nav-link"
 						href="/jobs.html">HOME</a>
-					<a class="nav-item nav-link" href="/auth/add.html">NEW JOB<span
-						class="sr-only">(current)</span></a> 
-						<a class="nav-item nav-link"
-						href="/auth/list.html">MANAGE JOBS</a>
+					<a class="nav-item nav-link" href="/auth/add.html">NEW JOB</a> 
+						<a class="nav-item nav-link active"
+						href="#">MANAGE JOBS<span
+						class="sr-only">(current)</span></a>
 				</div>
 			</div>
 		</nav>
-		<h2 class="text-center mt-3">NEW JOB FORM</h2>
-		<form class="mt-2">
-			<div class="form-group">
-				<label for="title">Title</label> <input
-					type="text" class="form-control" id="title" name="title">
-			</div>
-			<div class="form-group">
-				<label for="numberOfPeopleHire">Number Of People Hire</label> <input
-					type="number" class="form-control" id="numberOfPeopleHire" name="numberOfPeopleHire">
-			</div>
-			<div class="form-group">
-				<label for="lastApplicationDate">Last Application Date</label> <input
-					type="date" class="form-control" id="lastApplicationDate" name="lastApplicationDate">
-			</div>
-			<div class="form-group">
-				<label for="description">JOB DESCRIPTION</label> <textarea
-					class="form-control" id="description" rows="6" name="description"></textarea>
-			</div>
-			<button type="submit" class="btn btn-primary">Submit</button>
-		</form>
-
+		
+		<!-- JOB DIV TEMPLETE-->
+		<div class="border border-dark mt-3 pl-1" id="jobDiv" >
+			<h2 id="jobHeader"></h2>
+		</div>	
+		
+		<!-- JOB LISTININGS -->
+		<div id="listDiv">
+		
+		</div>
+		
 	</div>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script type="text/javascript">
-		
-		
 		
 	</script>
 </body>
