@@ -73,6 +73,10 @@
 				alert("Last Application Date Can Not Be Empty");
 				return false;
 			}
+			if ( lastApplicationDate.value.length > 10 ) {
+				alert("Year Length Must Be 4! Example: 1987");
+				return false;
+			}
 			return true;
 		}
 		
@@ -110,7 +114,6 @@
 		        }	
 			});
 		}
-		
 		
 	</script>
 </body>
