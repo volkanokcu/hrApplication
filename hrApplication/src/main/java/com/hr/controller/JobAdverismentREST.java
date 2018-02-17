@@ -1,4 +1,4 @@
-package com.hr.rest;
+package com.hr.controller;
 
 import java.util.List;
 

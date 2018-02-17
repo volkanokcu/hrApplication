@@ -33,6 +33,8 @@
 			<h3 id="jobHeader"></h3>
 		</div>	
 		
+		<h2 id="noDataMsg" class="text-danger mt-3" style="display:none">There Are No Job Listings Available Yet</h2>
+		
 		<!-- JOB LISTININGS -->
 		<div id="listDiv">
 		
@@ -43,86 +45,93 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script type="text/javascript">
-	var list = null;
-	var jobDiv = document.getElementById("jobDiv");
-	var listDiv = document.getElementById("listDiv");
+	
+
+		var list = null;
+		var jobDiv = document.getElementById("jobDiv");
+		var listDiv = document.getElementById("listDiv");
+		var noDataMsg = document.getElementById("noDataMsg");
 
 		$.ajax({
-			type: 'GET',
-			url: '/job/list',
-			contentType: "application/json; charset=utf-8",
-			async: false,
-			dataType: "json",
-			success: function (result) {
+			type : 'GET',
+			url : '/job/list',
+			contentType : "application/json; charset=utf-8",
+			async : false,
+			dataType : "json",
+			success : function(result) {
 				list = result;
 			},
-			error: function(err) {
+			error : function(err) {
 				console.log(err)
-	        }	
+			}
 		});
-	
-	function cloneJobDiv(i) {
-		var div = jobDiv.cloneNode(true);
-		div.id = "jobDiv" + i;
-		div.style = "";
-		return div;
-	}
-	
-	function createDeleteBtn(id) {
-		var btn = document.createElement("BUTTON");
-		btn.setAttribute("class", "btn btn-danger ml-1");
-		btn.setAttribute("onClick", "deleteJob(" + id + ")");
-		btn.innerHTML = "Delete";
-		return btn;
-	}
-	
-	function createEditBtn(id) {
-		var btn = document.createElement("a");
-		btn.setAttribute("class", "btn btn-primary active ml-1");
-		btn.setAttribute("role", "button");
-		btn.setAttribute("aria-pressed", "true");
-		btn.setAttribute("href", "/auth/edit.html?id=" + id);
-		btn.innerHTML = "Edit";
-		return btn;
-	}
-	
-	/*FILL JOB LIST*/
-	if ( null != list ) {
-		for ( var i=0; i<list.length; i++) {
-			var job = list[i];
-			var jobDiv = cloneJobDiv(job.id);
-			jobDiv.querySelector("#jobHeader").innerHTML = job.title;
-			jobDiv.querySelector("#jobHeader").href = "/job.html?id=" + job.id;
-			var editBtn = createEditBtn(job.id);
-			var deleteBtn = createDeleteBtn(job.id);
-			jobDiv.querySelector("#jobHeader").appendChild(editBtn);
-			jobDiv.querySelector("#jobHeader").appendChild(deleteBtn);
-			listDiv.appendChild(jobDiv);
+
+		function cloneJobDiv(i) {
+			var div = jobDiv.cloneNode(true);
+			div.id = "jobDiv" + i;
+			div.style = "";
+			return div;
 		}
-	}
-	
-	function deleteJobDiv(id) {
-		document.getElementById("jobDiv" + id).remove();
-	}
-	
-	function deleteJob(id) {
-		$.ajax({
-			type: 'DELETE',
-			url: '/auth/job/' + id,
-			contentType: "application/json; charset=utf-8",
-			async: false,
-			dataType: "json",
-			success: function (result) {
-				if (200 == result.status) {
-					alert("Delete Successful");
-					deleteJobDiv(id);
+
+		function createDeleteBtn(id) {
+			var btn = document.createElement("BUTTON");
+			btn.setAttribute("class", "btn btn-danger ml-1");
+			btn.setAttribute("onClick", "deleteJob(" + id + ")");
+			btn.innerHTML = "Delete";
+			return btn;
+		}
+
+		function createEditBtn(id) {
+			var btn = document.createElement("a");
+			btn.setAttribute("class", "btn btn-primary active ml-1");
+			btn.setAttribute("role", "button");
+			btn.setAttribute("aria-pressed", "true");
+			btn.setAttribute("href", "/auth/edit.html?id=" + id);
+			btn.innerHTML = "Edit";
+			return btn;
+		}
+
+		/*FILL JOB LIST*/
+		if (null == list || list.length <= 0) {
+			noDataMsg.style = "";
+		} else {
+			for (var i = 0; i < list.length; i++) {
+				var job = list[i];
+				var jobDiv = cloneJobDiv(job.id);
+				jobDiv.querySelector("#jobHeader").innerHTML = job.title;
+				jobDiv.querySelector("#jobHeader").href = "/job.html?id="
+						+ job.id;
+				var editBtn = createEditBtn(job.id);
+				var deleteBtn = createDeleteBtn(job.id);
+				jobDiv.querySelector("#jobHeader").appendChild(editBtn);
+				jobDiv.querySelector("#jobHeader").appendChild(deleteBtn);
+				listDiv.appendChild(jobDiv);
+			}
+		}
+
+		function deleteJobDiv(id) {
+			document.getElementById("jobDiv" + id).remove();
+		}
+
+		function deleteJob(id) {
+			$.ajax({
+				type : 'DELETE',
+				url : '/auth/job/' + id,
+				contentType : "application/json; charset=utf-8",
+				async : false,
+				dataType : "json",
+				success : function(result) {
+					if (200 == result.status) {
+						alert("Delete Successful");
+						deleteJobDiv(id);
+					}
+				},
+				error : function(err) {
+					console.log(err)
 				}
-			},
-			error: function(err) {
-				console.log(err)
-	        }	
-		});
-	}
+			});
+		}
+		
 	</script>
 </body>
 </html>

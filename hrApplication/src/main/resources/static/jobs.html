@@ -31,6 +31,8 @@
 			<h2><a href="" id="jobHeader"></a></h2>
 		</div>	
 		
+		<h2 id="noDataMsg" class="text-danger mt-3" style="display:none">There Are No Job Listings Available Yet</h2>
+		
 		<!-- JOB LISTINGS -->
 		<div id="listDiv">
 		
@@ -42,42 +44,45 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script type="text/javascript">
 	
-	var list = null;
-	var jobDiv = document.getElementById("jobDiv");
-	var listDiv = document.getElementById("listDiv");
+		var list = null;
+		var jobDiv = document.getElementById("jobDiv");
+		var listDiv = document.getElementById("listDiv");
+		var noDataMsg = document.getElementById("noDataMsg");
 
 		$.ajax({
-			type: 'GET',
-			url: '/job/list',
-			contentType: "application/json; charset=utf-8",
-			async: false,
-			dataType: "json",
-			success: function (result) {
+			type : 'GET',
+			url : '/job/list',
+			contentType : "application/json; charset=utf-8",
+			async : false,
+			dataType : "json",
+			success : function(result) {
 				list = result;
 			},
-			error: function(err) {
+			error : function(err) {
 				console.log(err)
-	        }	
+			}
 		});
-	
-	function cloneJobDiv(i) {
-		var div = jobDiv.cloneNode(true);
-		div.id += i;
-		div.style = "";
-		return div;
-	}
-	
-	/*FILL JOB LIST*/
-	if ( null != list ) {
-		for ( var i=0; i<list.length; i++) {
-			var job = list[i];
-			var jobDiv = cloneJobDiv(i);
-			jobDiv.querySelector("#jobHeader").innerHTML = job.title;
-			jobDiv.querySelector("#jobHeader").href = "/job.html?id=" + job.id;
-			listDiv.appendChild(jobDiv);
+
+		function cloneJobDiv(i) {
+			var div = jobDiv.cloneNode(true);
+			div.id += i;
+			div.style = "";
+			return div;
 		}
-	}
-	
+
+		/*FILL JOB LIST*/
+		if (null == list || list.length <= 0) {
+			noDataMsg.style = "";
+		} else {
+			for (var i = 0; i < list.length; i++) {
+				var job = list[i];
+				var jobDiv = cloneJobDiv(i);
+				jobDiv.querySelector("#jobHeader").innerHTML = job.title;
+				jobDiv.querySelector("#jobHeader").href = "/job.html?id="
+						+ job.id;
+				listDiv.appendChild(jobDiv);
+			}
+		}
 		
 	</script>
 </body>
