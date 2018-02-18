@@ -1,8 +1,11 @@
 package com.hr.entity.impl;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import com.hr.entity.AbstractEntity;
@@ -29,6 +32,10 @@ public class Applicant extends AbstractEntity {
 	
 	@Column(name="RESUME", length = 1000)
 	private String resume;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="REF_JOB_ADVERISMENT_ID")
+	private JobAdvertisement jobAdvertisement;
 
 	/*GETTERS*/
 	public String getName() {
@@ -49,6 +56,10 @@ public class Applicant extends AbstractEntity {
 
 	public String getResume() {
 		return resume;
+	}
+	
+	public JobAdvertisement getJobAdvertisement() {
+		return jobAdvertisement;
 	}
 
 	/*SETTERS*/
@@ -72,5 +83,8 @@ public class Applicant extends AbstractEntity {
 		this.resume = resume;
 	}
 	
+	public void setJobAdvertisement(JobAdvertisement jobAdvertisement) {
+		this.jobAdvertisement = jobAdvertisement;
+	}
 
 }

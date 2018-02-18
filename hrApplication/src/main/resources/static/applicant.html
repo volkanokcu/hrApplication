@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CREATE NEW JOB</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+	<div class="container">
+	
+	
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<div class="navbar-nav">
+					<a class="nav-item nav-link" href="/jobs.html">JOB LISTNINGS<span
+						class="sr-only">(current)</span></a> 
+					<a class="nav-item nav-link"
+						href="/auth/add.html">JOB MANAGER PAGE</a>
+				</div>
+			</div>
+		</nav>
+		
+		<h2 class="text-center mt-3">NEW JOB FORM</h2>
+		<form class="mt-2" id="form" enctype="multipart/form-data">
+			<input type="hidden" id="jobAdverisment" name="jobAdverisment.id">
+			<div class="form-group">
+				<label for="name">First Name/Last Name</label> <input
+					type="text" class="form-control" id="name" name="name">
+			</div>
+			<div class="form-group">
+				<label for="email">Email</label> <input
+					type="email" class="form-control" id="email" name="email">
+			</div>
+			<div class="form-group">
+				<label for="phone">Phone</label> <input
+					type="number" class="form-control" id="phone" name="phone">
+			</div>
+			<div class="form-group">
+				<label for="address">Address</label> <input
+					type="text" class="form-control" id="address" name="address">
+			</div>
+			<div class="form-group">
+				<label for="thoughtsOnJob">Thoughts On Job</label> <textarea
+					class="form-control" id="thoughtsOnJob" rows="4" name="thoughtsOnJob"></textarea>
+			</div>
+			<div class="form-group">
+				<label for="file">Resume (Word or Text)</label> <input type="file"
+					class="form-control" id="file" name="file" accept=".txt, .doc">
+			</div>
+
+			<button type="button" class="btn btn-primary" onClick="if(validation()) save();" >Submit</button>
+		</form>
+
+	</div>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		
+		var form = document.getElementById("form");
+		var name = document.getElementById("name");
+		var email = document.getElementById("email");
+		var phone = document.getElementById("phone");
+		var address = document.getElementById("address");
+		var thoughtsOnJob = document.getElementById("thoughtsOnJob");
+	
+		function validation() {
+			if ( "" == name.value ) {
+				alert("Name Can Not Be Empty");
+				return false;
+			}
+			if ( "" == email.value ) {
+				alert("Email Date Can Not Be Empty");
+				return false;
+			}
+			if ( "" == phone.value ) {
+				alert("Phone Can Not Be Empty");
+				return false;
+			}
+			if ( "" == address.value ) {
+				alert("Address Can Not Be Empty");
+				return false;
+			}
+			if ( "" == thoughtsOnJob.value ) {
+				alert("Throught On Job Can Not Be Empty");
+				return false;
+			}
+			
+			return true;
+		}
+
+		function toJson(formData) {
+			var object = {};
+			formData.forEach(function(value, key){
+			    object[key] = value;
+			});
+			return JSON.stringify(object);
+		}
+		
+		function save() {
+			formData = new FormData(form);
+			console.log(formData);
+			formData.append("file", form.file.files[0])
+			data = toJson(formData);
+			console.log(data);
+			$.ajax({
+				type: 'POST',
+				url: '/applicant/add',
+				enctype: 'multipart/form-data',
+				dataType: "json",
+				data: data,
+		        processData: false, 
+		        contentType: false,
+		        cache: false,
+		        timeout: 600000,
+				success: function (result) {
+					if (201 == result.status) {
+						alert("Başvurunuz Alınmıştır");
+					}
+				},
+				error: function(err) {
+					console.log(err)
+		        }	
+			});
+		}
+		
+	</script>
+</body>
+</html>
