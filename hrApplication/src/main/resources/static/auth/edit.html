@@ -48,7 +48,7 @@
 				<label for="description">JOB DESCRIPTION</label> <textarea
 					class="form-control" id="description" rows="6" name="description"></textarea>
 			</div>
-			<button type="button" class="btn btn-primary" onClick="update()">Update</button>
+			<button type="button" class="btn btn-primary" onClick="if(validation()) update();">Update</button>
 		</form>
 
 	</div>
@@ -101,6 +101,10 @@
 			}
 			if ( "" == numberOfPeopleHire.value ) {
 				alert("Number Of People Hire Can Not Be Empty");
+				return false;
+			}
+			if ( null == lastApplicationDate.valueAsDate ) {
+				alert("Please Enter A Valid Date");
 				return false;
 			}
 			if ( "" == lastApplicationDate.value ) {

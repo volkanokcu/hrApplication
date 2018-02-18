@@ -71,6 +71,10 @@
 				alert("Number Of People Hire Can Not Be Empty");
 				return false;
 			}
+			if ( null == lastApplicationDate.valueAsDate ) {
+				alert("Please Enter A Valid Date");
+				return false;
+			}
 			if ( "" == lastApplicationDate.value ) {
 				alert("Last Application Date Can Not Be Empty");
 				return false;

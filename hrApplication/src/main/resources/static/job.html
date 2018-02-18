@@ -34,7 +34,7 @@
 			<h3>Job Description</h3>
 			<p id="description"></p>
 		</div>
-		<button type="button" class="btn btn-primary" onClick="if(validation()) save();" >Apply Job</button>
+		<a id="applicationBtn" class="btn btn-primary active ml-1" role="button" aria-pressed="true" href="">Apply Job</a>
 		
 	</div>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -46,6 +46,7 @@
 		var numberOfPeopleHire = document.getElementById("numberOfPeopleHire");
 		var lastApplicationDate = document.getElementById("lastApplicationDate");
 		var description = document.getElementById("description");
+		var applicationBtn = document.getElementById("applicationBtn");
 		var url = new URL(window.location.href);
 		var id = url.searchParams.get("id");
 		var job = null;
@@ -74,6 +75,7 @@
 			numberOfPeopleHire.innerHTML += job.numberOfPeopleHire;
 			lastApplicationDate.innerHTML += job.lastApplicationDate
 			description.innerHTML = job.description;
+			applicationBtn.href = "/applicant.html?id=" + job.id;
 		}
 	
 	</script>

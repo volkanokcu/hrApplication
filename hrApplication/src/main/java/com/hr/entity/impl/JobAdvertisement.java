@@ -29,7 +29,7 @@ public class JobAdvertisement extends AbstractEntity {
 	private Integer numberOfPeopleHire;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(name="LAST_APPLİCATON_DATE", nullable = false, length = 4)
+	@Column(name="LAST_APPLİCATON_DATE", nullable = false)
 	private Date lastApplicationDate;
 	
 	/*GETTERS*/
