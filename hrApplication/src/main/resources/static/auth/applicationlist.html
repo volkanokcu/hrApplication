@@ -21,21 +21,21 @@
 					<a class="nav-item nav-link"
 						href="/jobs.html">HOME</a>
 					<a class="nav-item nav-link" href="/auth/add.html">NEW JOB</a> 
-						<a class="nav-item nav-link active"
-						href="#">MANAGE JOBS<span
-						class="sr-only">(current)</span></a>
 					<a class="nav-item nav-link"
-						href="/auth/applicationlist.html">MANAGE APPLICATIONS</a>
+						href="/auth/list.html">MANAGE JOBS</span></a>
+					<a class="nav-item nav-link active"
+						href="#">MANAGE APPLICATIONS<span
+						class="sr-only">(current)</span></a>
 				</div>
 			</div>
 		</nav>
 		
 		<!-- JOB DIV TEMPLETE-->
-		<div class="border border-dark mt-3 pl-1" id="jobDiv" style="display:none">
-			<h3 id="jobHeader"></h3>
+		<div class="border border-dark mt-3 pl-1" id="applicantDiv" style="display:none">
+			<h3 id="applicantName"></h3>
 		</div>	
 		
-		<h2 id="noDataMsg" class="text-danger mt-3" style="display:none">There Are No Job Listings Available Yet</h2>
+		<h2 id="noDataMsg" class="text-danger mt-3" style="display:none">There Are No Application Available Yet</h2>
 		
 		<!-- JOB LISTININGS -->
 		<div id="listDiv">
@@ -50,13 +50,13 @@
 	
 
 		var list = null;
-		var jobDiv = document.getElementById("jobDiv");
+		var applicantDiv = document.getElementById("applicantDiv");
 		var listDiv = document.getElementById("listDiv");
 		var noDataMsg = document.getElementById("noDataMsg");
 
 		$.ajax({
 			type : 'GET',
-			url : '/job/list',
+			url : "/auth/applicant/list",
 			contentType : "application/json; charset=utf-8",
 			async : false,
 			dataType : "json",
@@ -68,9 +68,9 @@
 			}
 		});
 
-		function cloneJobDiv(i) {
-			var div = jobDiv.cloneNode(true);
-			div.id = "jobDiv" + i;
+		function cloneApplicantDiv(i) {
+			var div = applicantDiv.cloneNode(true);
+			div.id = "applicantDiv" + i;
 			div.style = "";
 			return div;
 		}
@@ -78,18 +78,18 @@
 		function createDeleteBtn(id) {
 			var btn = document.createElement("BUTTON");
 			btn.setAttribute("class", "btn btn-danger ml-1");
-			btn.setAttribute("onClick", "deleteJob(" + id + ")");
+			btn.setAttribute("onClick", "deleteApplicant(" + id + ")");
 			btn.innerHTML = "Delete";
 			return btn;
 		}
-
-		function createEditBtn(id) {
+		
+		function createShowBtn(id) {
 			var btn = document.createElement("a");
 			btn.setAttribute("class", "btn btn-primary active ml-1");
 			btn.setAttribute("role", "button");
 			btn.setAttribute("aria-pressed", "true");
-			btn.setAttribute("href", "/auth/edit.html?id=" + id);
-			btn.innerHTML = "Edit";
+			btn.setAttribute("href", "/auth/showapplicant.html?id=" + id);
+			btn.innerHTML = "Show";
 			return btn;
 		}
 
@@ -98,32 +98,32 @@
 			noDataMsg.style = "";
 		} else {
 			for (var i = 0; i < list.length; i++) {
-				var job = list[i];
-				var jobDiv = cloneJobDiv(job.id);
-				jobDiv.querySelector("#jobHeader").innerHTML = job.title;
-				var editBtn = createEditBtn(job.id);
-				var deleteBtn = createDeleteBtn(job.id);
-				jobDiv.querySelector("#jobHeader").appendChild(editBtn);
-				jobDiv.querySelector("#jobHeader").appendChild(deleteBtn);
-				listDiv.appendChild(jobDiv);
+				var application = list[i];
+				var applicantDiv = cloneApplicantDiv(application.id);
+				applicantDiv.querySelector("#applicantName").innerHTML = application.name;
+				var showBtn = createShowBtn(application.id);
+				var deleteBtn = createDeleteBtn(application.id);
+				applicantDiv.querySelector("#applicantName").appendChild(showBtn);
+				applicantDiv.querySelector("#applicantName").appendChild(deleteBtn);
+				listDiv.appendChild(applicantDiv);
 			}
 		}
 
-		function deleteJobDiv(id) {
-			document.getElementById("jobDiv" + id).remove();
+		function deleteApplicantDiv(id) {
+			document.getElementById("applicantDiv" + id).remove();
 		}
 
-		function deleteJob(id) {
+		function deleteApplicant(id) {
 			$.ajax({
 				type : 'DELETE',
-				url : '/auth/job/' + id,
+				url : '/auth/applicant/delete/' + id,
 				contentType : "application/json; charset=utf-8",
 				async : false,
 				dataType : "json",
 				success : function(result) {
 					if (200 == result.status) {
 						alert("Delete Successful");
-						deleteJobDiv(id);
+						deleteApplicantDiv(id);
 					}
 				},
 				error : function(err) {

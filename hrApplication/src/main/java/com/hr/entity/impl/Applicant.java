@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
 import com.hr.entity.AbstractEntity;
 
 @Entity
@@ -21,21 +22,38 @@ public class Applicant extends AbstractEntity {
 	@Column(name="NAME", nullable = false, length = 100)
 	private String name;
 	
-	@Column(name="EMAIL", length = 100)
+	@Column(name="EMAIL", nullable=false, length = 100)
 	private String email;
 
-	@Column(name="PHONE", length = 100)
+	@Column(name="PHONE", nullable=false, length = 100)
 	private String phone;
 	
-	@Column(name="THOUGHTS_ON_JOB", length = 1000)
+	@Column(name="THOUGHTS_ON_JOB", nullable=false, length = 1000)
 	private String thoughtsOnJob;
 	
 	@Column(name="RESUME", length = 1000)
 	private String resume;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name="REF_JOB_ADVERISMENT_ID")
 	private JobAdvertisement jobAdvertisement;
+	
+	public Applicant() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Applicant(String name, String email, String phone, String thoughtsOnJob, String resume,
+			JobAdvertisement jobAdvertisement) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+		this.thoughtsOnJob = thoughtsOnJob;
+		this.resume = resume;
+		this.jobAdvertisement = jobAdvertisement;
+	}
+
+
 
 	/*GETTERS*/
 	public String getName() {

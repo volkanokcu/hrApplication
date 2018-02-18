@@ -27,9 +27,9 @@
 			</div>
 		</nav>
 		
-		<h2 class="text-center mt-3">NEW JOB FORM</h2>
+		<h2 class="text-center mt-3">APPLICANT FORM</h2>
 		<form class="mt-2" id="form" enctype="multipart/form-data">
-			<input type="hidden" id="jobAdverisment" name="jobAdverisment.id">
+			<input type="hidden" id="jobId" name="jobId">
 			<div class="form-group">
 				<label for="name">First Name/Last Name</label> <input
 					type="text" class="form-control" id="name" name="name">
@@ -70,6 +70,33 @@
 		var phone = document.getElementById("phone");
 		var address = document.getElementById("address");
 		var thoughtsOnJob = document.getElementById("thoughtsOnJob");
+		var jobId = document.getElementById("jobId");
+		var url = new URL(window.location.href);
+		var urlId = url.searchParams.get("id");
+		var job = null;
+		
+		if (null != urlId) {
+			$.ajax({
+				type: 'GET',
+				url: '/job/details/' + urlId,
+				contentType: "application/json; charset=utf-8",
+				async: false,
+				dataType: "json",
+				success: function (result) {
+					job = result;
+				},
+				error: function(err) {
+					console.log(err)
+		        }	
+			});
+			
+		} else window.location.replace("/jobs.html");
+		
+		if ( null == job ) {
+			window.location.replace("/jobs.html");
+		} else {
+			jobId.value = job.id;
+		}
 	
 		function validation() {
 			if ( "" == name.value ) {
@@ -106,27 +133,25 @@
 		
 		function save() {
 			formData = new FormData(form);
-			console.log(formData);
-			formData.append("file", form.file.files[0])
-			data = toJson(formData);
-			console.log(data);
 			$.ajax({
 				type: 'POST',
 				url: '/applicant/add',
 				enctype: 'multipart/form-data',
 				dataType: "json",
-				data: data,
+				data: formData,
 		        processData: false, 
 		        contentType: false,
 		        cache: false,
 		        timeout: 600000,
 				success: function (result) {
 					if (201 == result.status) {
-						alert("Başvurunuz Alınmıştır");
+						alert("Başvurunuz Alınmıştır.");
+						window.location.replace("/jobs.html");
 					}
 				},
 				error: function(err) {
-					console.log(err)
+					console.log(err);
+					alert("Bir Hata Oluştu Lütfen Daha Sonra Tekrar Deneyiniz");
 		        }	
 			});
 		}
